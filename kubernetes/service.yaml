@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: djangoPi-svc
+  labels:
+    app: djangoPi
+spec:
+  ports:
+    - port: 8000
+      protocol: TCP
+      targetPort: 8000
+  selector:
+    app: djangoPi
+    type: web
+  type: ClusterIP

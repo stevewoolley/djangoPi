@@ -1,0 +1,52 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: djangoPi-web
+  labels:
+    app: djangoPi
+    type: web
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: djangoPi
+        type: web
+    spec:
+      containers:
+        - name: djangoPi-web
+          image: ndevox/django-kubernetes-starter:latest
+          imagePullPolicy: Always
+          command: [ "gunicorn", "--workers", "1", "--bind", ":8000",
+                     "--log-level", "INFO", "djangoPi.wsgi:application" ]
+          envFrom:
+            - configMapRef:
+                name: djangoPi-config
+          ports:
+            - containerPort: 8000
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: djangoPi-worker
+  labels:
+    app: djangoPi
+    type: worker
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: djangoPi
+        type: worker
+    spec:
+      containers:
+        - name: djangoPi-worker
+          image: ndevox/django-kubernetes-starter:latest
+          imagePullPolicy: Always
+          command: [ "celery", "-A", "demo_tasks.tasks:app",
+                     "--loglevel=INFO", "worker" ]
+          envFrom:
+            - configMapRef:
+                name: djangoPi-config
+

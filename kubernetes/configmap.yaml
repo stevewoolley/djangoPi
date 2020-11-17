@@ -1,0 +1,13 @@
+apiVersion: v1
+data:
+  SECRET_KEY: 'REPLACE WITH YOUR SECRET KEY'
+  BROKER_USER: demo  # Make sure this matches the one in rabbit.yaml
+  BROKER_PASS: demo  # Make sure this matches the one in rabbit.yaml
+  BROKER_HOST: rabbit-rabbitmq
+  DB_HOST: postgres-postgresql
+  DB_NAME: demo  # Make sure this matches the one in postgres.yaml
+  DB_USER: demo  # Make sure this matches the one in postgres.yaml
+  DB_PASS: demo  # Make sure this matches the one in postgres.yaml
+kind: ConfigMap
+metadata:
+  name: djangoPi-config

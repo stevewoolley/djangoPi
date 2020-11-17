@@ -1,0 +1,39 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: djangoPi-migrate
+  labels:
+    name: djangoPi
+    type: migrate
+spec:
+  template:
+    spec:
+      containers:
+      - name: djangoPi-migrate
+        image: ndevox/django-kubernetes-starter:latest
+        command: ["python",  "manage.py", "migrate", "--noinput"]
+        envFrom:
+        - configMapRef:
+            name: djangoPi-config
+      restartPolicy: Never
+  backoffLimit: 4
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: djangoPi-collectstatic
+  labels:
+    name: djangoPi
+    type: collectstatic
+spec:
+  template:
+    spec:
+      containers:
+      - name: djangoPi-collectstatic
+        image: ndevox/django-kubernetes-starter:latest
+        command: ["python3",  "manage.py", "collectstatic", "--noinput"]
+        envFrom:
+        - configMapRef:
+            name: djangoPi-config
+      restartPolicy: Never
+  backoffLimit: 4
